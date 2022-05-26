@@ -48,3 +48,6 @@ Thumbs.db
 /test-results/
 /playwright-report/
 /playwright/.cache/
+
+# Reporters
+/allure-results

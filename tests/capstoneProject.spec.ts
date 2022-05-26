@@ -6,22 +6,21 @@ import { BasePage } from './pages/basePage';
 
 const APP_URL = 'http://localhost:4200/';
 
+const NEW_REGULAR_HERO_NAME = 'Ahiles';
+const NEW_TOP_HERO_NAME = 'Gerakl';
+
 test.beforeEach(async ({ page }) => {
   await page.goto(APP_URL);
 });
 
 test.describe('Hero ID', () => {
-  test('id of the hero should be equal id in the url on hero detailed page', async ({page}) => {
-    // Get the first hero from the heroes list on My Heroes page
+  test('id of the hero should be equal id in the url on hero detailed page', async ({
+    page,
+  }) => {
+    // Get the random hero from the heroes list on My Heroes page
 
-    const basePage = new BasePage(page);
     const heroes = new Heroes(page);
-
-    await basePage.navigateToHeroes();
-    await heroes.heroesList.first().waitFor();
-    const heroesCount = await heroes.heroesList.count();
-    const randomHeroIndex = Math.floor(Math.random() * heroesCount);
-    const randomHero = heroes.heroesList.nth(randomHeroIndex);
+    const randomHero = await getRandomHeroe(heroes);
     const randomHeroText = await randomHero.textContent();
     const randomHeroId = randomHeroText?.split(' ')[0];
 
@@ -32,10 +31,47 @@ test.describe('Hero ID', () => {
 });
 
 test.describe('Change the hero name', () => {
-  test('name of the hero should be saved after changes on blank and My Heroes page', async ({
+  test('name of the regular hero should be saved after changes on blank and My Heroes page', async ({
     page,
   }) => {
-    // fsfs
+    const heroes = new Heroes(page);
+    const detail = new Detail(page);
+
+    // Get the random hero from the heroes list on My Heroes page
+    const randomHero = await getRandomHeroe(heroes);
+
+    // Go to hero details
+    await randomHero.click();
+    
+    // Change the name
+    await detail.changeHeroNane(NEW_REGULAR_HERO_NAME);
+
+    // Check the new name is in the list
+    await heroes.heroesList.first().waitFor();
+    await expect(heroes.heroesList.filter({hasText: NEW_REGULAR_HERO_NAME})).toBeVisible();
+
+    // Go to the new hero details
+    await heroes.heroesList.filter({hasText: NEW_REGULAR_HERO_NAME}).click();
+
+    // Check the name is changed on the details page
+    const newNameTitle = await detail.heroNameTitle.textContent();
+    expect(newNameTitle?.split(' ')[0]).toBe(
+      NEW_REGULAR_HERO_NAME.toUpperCase()
+    );
+  });
+
+  test('name of the top hero should be saved after changes on blank and My Heroes page', async ({
+    page,
+  }) => {
+    // Go to dashboard page
+    // Click on random top hero
+    // Go to hero details
+    // Change the name
+    // Check the name is changed on the details page
+    // Go to heroes page
+    // Check the new name is in the all heroes list
+    // Go to dashboard page
+    // Check the new name is in the top heroes list
   });
 });
 
@@ -56,3 +92,12 @@ test.describe('Add and Delete', () => {
     //ytyt
   });
 });
+
+async function getRandomHeroe(heroes: Heroes) {
+  await heroes.navigateToHeroes();
+  await heroes.heroesList.first().waitFor();
+  const heroesCount = await heroes.heroesList.count();
+  const randomHeroIndex = Math.floor(Math.random() * heroesCount);
+  const randomHero = heroes.heroesList.nth(randomHeroIndex);
+  return randomHero;
+}

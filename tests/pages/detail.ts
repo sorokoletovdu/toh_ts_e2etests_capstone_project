@@ -28,5 +28,6 @@ export class Detail extends BasePage {
 
   async goBackToHeroes() {
       await this.goBackButton.click();
+      await expect(this.page).toHaveURL(/.*heroes/);
   }
 }

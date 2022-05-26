@@ -18,13 +18,16 @@ test.describe('Hero ID', () => {
     const heroes = new Heroes(page);
 
     await basePage.navigateToHeroes();
-    const firstHero = heroes.heroesList.nth(0);
-    const firstHeroText = await firstHero.textContent();
-    const firstHeroId = firstHeroText?.split(' ')[0];
+    await heroes.heroesList.first().waitFor();
+    const heroesCount = await heroes.heroesList.count();
+    const randomHeroIndex = Math.floor(Math.random() * heroesCount);
+    const randomHero = heroes.heroesList.nth(randomHeroIndex);
+    const randomHeroText = await randomHero.textContent();
+    const randomHeroId = randomHeroText?.split(' ')[0];
 
     // Check the hero id is in url
-    await firstHero.click();
-    expect(page.url()).toBe(`${APP_URL}detail/${firstHeroId}`);
+    await randomHero.click();
+    expect(page.url()).toBe(`${APP_URL}detail/${randomHeroId}`);
   });
 });
 

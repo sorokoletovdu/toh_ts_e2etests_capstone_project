@@ -19,12 +19,10 @@ export class BasePage {
 
   async navigateToDashboard() {
     await this.dashboardButton.first().click();
-    await expect(this.page).toHaveURL(/.*dashboard/);
   }
 
   async navigateToHeroes() {
     await this.heroesButton.first().click();
-    await expect(this.page).toHaveURL(/.*heroes/);
   }
 
   async clearMessages() {

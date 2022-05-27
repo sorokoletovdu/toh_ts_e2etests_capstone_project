@@ -29,4 +29,8 @@ export class Heroes extends BasePage {
   async deleteHero(name: string) {
       await this.page.locator(`.heroes:has-text("${name}") >> button`).click();
   }
+
+  async checkHeroesPageOpened() {
+    await expect(this.page).toHaveURL(/.*heroes/);
+  }
 }

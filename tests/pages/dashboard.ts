@@ -3,7 +3,7 @@ import { BasePage } from './basePage';
 
 export class Dashboard extends BasePage {
   readonly topHeroesTitle: Locator;
-  readonly topHeroesMenu: Locator;
+  readonly topHeroesList: Locator;
   readonly heroSearchLabel: Locator;
   readonly heroSearchInput: Locator;
   readonly heroSearchResult: Locator;
@@ -11,14 +11,14 @@ export class Dashboard extends BasePage {
   constructor(page: Page) {
     super(page);
     this.topHeroesTitle = page.locator('h2', { hasText: 'Top Heroes' });
-    this.topHeroesMenu = page.locator('.heroes-menu');
+    this.topHeroesList = page.locator('.heroes-menu a');
     this.heroSearchLabel = page.locator('label', { hasText: 'Hero Search' });
     this.heroSearchInput = page.locator('#search-box');
     this.heroSearchResult = page.locator('#search-component > ul > li');
   }
 
   async chooseTheTopHero(name: string) {
-    await this.page.locator(`${this.topHeroesMenu} :text("${name}")`).click();
+      await this.topHeroesList.filter({hasText: `${name}`}).click();
   }
 
   async searchHero(name: string) {
@@ -34,4 +34,9 @@ export class Dashboard extends BasePage {
         throw new Error(`More than one result is found!`);
     }
   }
+
+  async checkDashboardPageOpened() {
+    await expect(this.page).toHaveURL(/.*dashboard/);
+  }
+
 }

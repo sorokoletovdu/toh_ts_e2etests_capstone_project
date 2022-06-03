@@ -186,7 +186,7 @@ test.describe(
       'Green Light',
     ];
     for (const newcommer of newcommers) {
-      test(`A here called ${newcommer} should be added and then deleted`, async ({
+      test(`A hero called ${newcommer} should be added and then deleted`, async ({
         page,
       }) => {
         const heroes = new Heroes(page);

@@ -14,7 +14,7 @@ export class Dashboard extends BasePage {
     this.topHeroesList = page.locator('.heroes-menu a');
     this.heroSearchLabel = page.locator('label', { hasText: 'Hero Search' });
     this.heroSearchInput = page.locator('#search-box');
-    this.heroSearchResult = page.locator('#search-component > ul > li');
+    this.heroSearchResult = page.locator('.search-result li');
   }
 
   async chooseTheTopHero(name: string) {
@@ -23,16 +23,7 @@ export class Dashboard extends BasePage {
 
   async searchHero(name: string) {
     await this.heroSearchInput.fill(name);
-    const resultsCount: number = await this.heroSearchResult.count();
-    switch (resultsCount) {
-      case 1:
-        await this.heroSearchResult.nth(0).click();
-        break;
-      case 0:
-        throw new Error(`The name=${name} is NOT found!`);
-      default:
-        throw new Error(`More than one result is found!`);
-    }
+    await this.heroSearchResult.first().click();
   }
 
   async checkDashboardPageOpened() {

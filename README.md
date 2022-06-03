@@ -39,3 +39,6 @@ Before running the tests make sure you are serving the app via `ng serve`.
 allure serve
 ```
 
+## Result of test execution
+
+![Screenshot](allure_result.png)
